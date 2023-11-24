@@ -29,8 +29,8 @@ class Text:
         return df.groupby('token').value_counts().sort_values(ascending=False)[:rows]
     
     def zipf(self):
-        tokens = pd.DataFrame(self.tokens, columns=['token'])
-        freq_token = self.tokens(rows=-1)
+        tokens_df = pd.DataFrame(self.tokens, columns=['token'])
+        freq_token = self.tokens_df(rows=-1)
         X = np.array(range(1, len(freq_token) + 1)).reshape(-1, 1)
         X_log=np.log10(X)
         y = freq_token
@@ -94,11 +94,11 @@ class Corpus:
         df = (df/df.sum()).T
         return df
 
-    def knn(self, n=50):
+    def knn(self, k=3, n=50):
         df = self.analisis1(n=n)
         unknown_writers = [n for n,i in enumerate([j.author for j in self.list_of_texts]) if i == None]
         new_point = df.iloc[unknown_writers,:]
-        knn = KNeighborsClassifier(n_neighbors=3)
+        knn = KNeighborsClassifier(n_neighbors=k)
 
         X = df.drop(df.index[unknown_writers])
         y = pd.DataFrame([i.author for i in self.list_of_texts]).dropna()
