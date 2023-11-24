@@ -82,6 +82,10 @@ class Corpus:
         print(f'Número de palabras: {len(self.words)}')
         print(f'Número de palabras únicas: {len(self.unique_words)}')
 
+    def corpus_content(self):
+        corpus_content = pd.DataFrame({'Title':[i.title for i in self.list_of_texts],'Author':[i.author for i in self.list_of_texts]})
+        return corpus_content
+
 
     def comparar_textos(self, n=10):
         most_common_words_df = pd.DataFrame(columns=self.ordered_tokens[:n])
