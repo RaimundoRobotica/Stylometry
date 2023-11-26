@@ -1,2 +1,2 @@
 # Stylometry
-Let's discover who wrote that!
+Let's find out who wrote that!
