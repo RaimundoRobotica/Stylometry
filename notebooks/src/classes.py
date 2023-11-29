@@ -116,7 +116,7 @@ class Corpus:
             prediction = knn.predict(test)
             dict['title'].append(self.list_of_texts[i].title)
             dict['author'].append(self.list_of_texts[i].author)
-            dict['prediction'].append(prediction)
+            dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
         return pd.DataFrame(dict)
 
@@ -154,7 +154,7 @@ class Corpus:
             svm.score(X, y_it)
             dict['title'].append(self.list_of_texts[i].title)
             dict['author'].append(self.list_of_texts[i].author)
-            dict['prediction'].append(prediction)
+            dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
         return pd.DataFrame(dict)
     
@@ -184,7 +184,7 @@ class Corpus:
             prediction = tree_clf.predict(test)
             dict['title'].append(self.list_of_texts[i].title)
             dict['author'].append(self.list_of_texts[i].author)
-            dict['prediction'].append(prediction)
+            dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
         return pd.DataFrame(dict)
     
@@ -206,6 +206,6 @@ class Corpus:
             prediction = gbct.predict(test)
             dict['title'].append(self.list_of_texts[i].title)
             dict['author'].append(self.list_of_texts[i].author)
-            dict['prediction'].append(prediction)
+            dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
         return pd.DataFrame(dict)
