@@ -2,12 +2,13 @@ import nltk
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVC
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.ensemble import GradientBoostingClassifier
 
 
@@ -108,7 +109,7 @@ class Corpus:
         authors = pd.DataFrame([i.author for i in self.list_of_texts])
         df = self.analisis1(n=n)
         knn = KNeighborsClassifier(n_neighbors=k)
-        for i in range(len(self.list_of_texts)-1):
+        for i in range(len(self.list_of_texts)):
             X = df.drop(self.list_of_texts[i].title).values
             y = authors.drop(i)
             test = df.loc[self.list_of_texts[i].title].values.reshape(1, -1)
@@ -170,13 +171,13 @@ class Corpus:
         dict['prediction'] = prediction
         return pd.DataFrame(dict)
     
-    def train_dt(self, n=1000, max_depth=2, random_state=42):
+    def train_dt(self, n=1000, max_depth=2, random_state=42, picture=False):
         dict = {'title':[], 'author':[], 'prediction':[], 'tokens':[]}
         authors = pd.DataFrame([i.author for i in self.list_of_texts])
         df = self.analisis1(n=n)
         tree_clf = DecisionTreeClassifier(max_depth=max_depth,
                                   random_state=random_state)
-        for i in range(len(self.list_of_texts)-1):
+        for i in range(len(self.list_of_texts)):
             X = df.drop(self.list_of_texts[i].title).values
             y = authors.drop(i)
             test = df.loc[self.list_of_texts[i].title].values.reshape(1, -1)
@@ -186,6 +187,11 @@ class Corpus:
             dict['author'].append(self.list_of_texts[i].author)
             dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
+        if picture:
+            texto_modelo = export_text(
+                    decision_tree = tree_clf,
+                    feature_names = list(df.columns))
+            print(texto_modelo)
         return pd.DataFrame(dict)
     
     def train_gbc(self, n=1000, max_depth=2, n_estimators=100, learning_rate=1.0, random_state=42):
@@ -198,7 +204,7 @@ class Corpus:
                                  learning_rate=learning_rate,
                                  random_state=random_state)
         
-        for i in range(len(self.list_of_texts)-1):
+        for i in range(len(self.list_of_texts)):
             X = df.drop(self.list_of_texts[i].title).values
             y = authors.drop(i)
             test = df.loc[self.list_of_texts[i].title].values.reshape(1, -1)
