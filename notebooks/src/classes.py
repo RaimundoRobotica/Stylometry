@@ -119,7 +119,7 @@ class Corpus:
             dict['author'].append(self.list_of_texts[i].author)
             dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
-        return pd.DataFrame(dict)
+        return pd.DataFrame(dict), knn
 
 
 
@@ -157,7 +157,7 @@ class Corpus:
             dict['author'].append(self.list_of_texts[i].author)
             dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
-        return pd.DataFrame(dict)
+        return pd.DataFrame(dict), svm
     
 
     def train_clustering(self,n=1000, n_clusters=3, n_init=10, random_state=42):
@@ -169,7 +169,7 @@ class Corpus:
         kmeans = KMeans(n_clusters=n_clusters, n_init=n_init, random_state=random_state)
         prediction = kmeans.fit_predict(df)
         dict['prediction'] = prediction
-        return pd.DataFrame(dict)
+        return pd.DataFrame(dict), kmeans
     
     def train_dt(self, n=1000, max_depth=2, random_state=42, picture=False):
         dict = {'title':[], 'author':[], 'prediction':[], 'tokens':[]}
@@ -192,7 +192,7 @@ class Corpus:
                     decision_tree = tree_clf,
                     feature_names = list(df.columns))
             print(texto_modelo)
-        return pd.DataFrame(dict)
+        return pd.DataFrame(dict), tree_clf
     
     def train_gbc(self, n=1000, max_depth=2, n_estimators=100, learning_rate=1.0, random_state=42):
         dict = {'title':[], 'author':[], 'prediction':[], 'tokens':[]}
@@ -214,4 +214,4 @@ class Corpus:
             dict['author'].append(self.list_of_texts[i].author)
             dict['prediction'].append(prediction[0])
             dict['tokens'].append(len(self.list_of_texts[i].tokens))
-        return pd.DataFrame(dict)
+        return pd.DataFrame(dict), gbct
